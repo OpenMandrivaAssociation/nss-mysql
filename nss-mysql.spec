@@ -1,7 +1,7 @@
 Summary:	MySQL NSS plugin
 Name:		nss-mysql
 Version:	1.0
-Release:	%mkrel 1
+Release:	%mkrel 2
 URL:		http://www.nongnu.org/nss-mysql/
 Group:		System/Libraries
 License:	GPL
@@ -44,9 +44,12 @@ rm -rf %{buildroot}
 
 %makeinstall_std
 
+install -d %{buildroot}/%{_lib}
+mv %{buildroot}%{_libdir}/lib* %{buildroot}/%{_lib}/
+
 # cleanup
-rm -f %{buildroot}%{_libdir}/lib*.so
-rm -f %{buildroot}%{_libdir}/lib*.*a
+rm -f %{buildroot}/%{_lib}/lib*.so
+rm -f %{buildroot}/%{_lib}/lib*.*a
 
 %post -p /sbin/ldconfig
 
@@ -60,5 +63,4 @@ rm -rf %{buildroot}
 %doc AUTHORS COPYING NEWS README SHADOW THANKS TODO UPGRADE sample.sql
 %attr(0640,root,root) %config(noreplace) %{_sysconfdir}/nss-mysql.conf
 %attr(0640,root,root) %config(noreplace) %{_sysconfdir}/nss-mysql-root.conf
-%attr(0755,root,root) %{_libdir}/libnss_mysql.so.*
-
+%attr(0755,root,root) /%{_lib}/libnss_mysql.so.*
