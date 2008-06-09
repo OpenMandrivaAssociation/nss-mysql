@@ -51,9 +51,13 @@ mv %{buildroot}%{_libdir}/lib* %{buildroot}/%{_lib}/
 rm -f %{buildroot}/%{_lib}/lib*.so
 rm -f %{buildroot}/%{_lib}/lib*.*a
 
+%if %mdkversion < 200900
 %post -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -p /sbin/ldconfig
+%endif
 
 %clean
 rm -rf %{buildroot}
