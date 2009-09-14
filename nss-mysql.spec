@@ -1,7 +1,7 @@
 Summary:	MySQL NSS plugin
 Name:		nss-mysql
 Version:	1.0
-Release:	%mkrel 4
+Release:	%mkrel 5
 URL:		http://www.nongnu.org/nss-mysql/
 Group:		System/Libraries
 License:	GPLv2+
