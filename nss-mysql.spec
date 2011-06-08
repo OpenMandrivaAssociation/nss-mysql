@@ -1,7 +1,7 @@
 Summary:	MySQL NSS plugin
 Name:		nss-mysql
 Version:	1.0
-Release:	%mkrel 10
+Release:	%mkrel 11
 URL:		http://www.nongnu.org/nss-mysql/
 Group:		System/Libraries
 License:	GPLv2+
@@ -33,7 +33,6 @@ libtoolize --copy --force; aclocal; autoconf
 
 %configure2_5x \
     --enable-group \
-    --enable-debug \
     --enable-shadow \
     --with-mysql=%{_prefix}                                              
 
