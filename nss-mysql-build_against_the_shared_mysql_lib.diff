@@ -1,0 +1,22 @@
+--- acinclude.m4	2002-07-05 16:25:50.000000000 +0200
++++ acinclude.m4.oden	2008-05-28 11:35:23.000000000 +0200
+@@ -68,15 +68,15 @@
+     *) MYSQL_LIB="$withval" ;;
+    esac],
+   [if test -z "$MYSQL_LIB"; then
+-	MYSQL_LIB=${MYSQL_HOME}/lib/mysql
++	MYSQL_LIB=${MYSQL_HOME}/lib
+    fi
+ ])
+ 
+-if test ! -f "${MYSQL_LIB}/libmysqlclient.a"; then
+-	if test -f "${MYSQL_HOME}/lib/libmysqlclient.a"; then
++if test ! -f "${MYSQL_LIB}/libmysqlclient.so"; then
++	if test -f "${MYSQL_HOME}/libmysqlclient.a"; then
+ 		MYSQL_LIB=${MYSQL_HOME}/lib
+ 	else
+-		AC_MSG_ERROR([${MYSQL_LIB}/libmysqlclient.a is not an existing file, use --with-mysql or --with-mysql-lib options])
++		AC_MSG_ERROR([${MYSQL_LIB}/libmysqlclient.so is not an existing file, use --with-mysql or --with-mysql-lib options])
+ 	fi
+ fi
+ 
