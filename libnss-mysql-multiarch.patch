@@ -1,0 +1,22 @@
+diff -urN libnss-mysql-1.5/acinclude.m4 libnss-mysql-1.5.sal/acinclude.m4
+--- libnss-mysql-1.5/acinclude.m4	2004-04-10 05:55:37.000000000 +0200
++++ libnss-mysql-1.5.sal/acinclude.m4	2007-11-18 09:39:01.000000000 +0100
+@@ -80,6 +80,18 @@
+     fi
+ done
+ 
++dnl Test also $libdir path
++if test -f "$libdir/libmysqlclient.so"
++then
++    MYSQL_LIB_DIR="$libdir"
++    break
++fi
++if test -f "$libdir/mysql/libmysqlclient.so"
++then
++    MYSQL_LIB_DIR="$libdir/mysql"
++    break
++fi
++
+ if test -n "$MYSQL_LIB_DIR"
+ then
+     AC_MSG_RESULT([$MYSQL_LIB_DIR])

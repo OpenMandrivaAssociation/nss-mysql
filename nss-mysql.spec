@@ -1,69 +1,56 @@
-Summary:	MySQL NSS plugin
-Name:		nss-mysql
-Version:	1.0
-Release:	%mkrel 11
-URL:		http://www.nongnu.org/nss-mysql/
-Group:		System/Libraries
-License:	GPLv2+
-Source0:	http://savannah.nongnu.org/download/nss-mysql/nss-mysql-%{version}.tar.gz
-Source1:	http://savannah.nongnu.org/download/nss-mysql/nss-mysql-%{version}.tar.gz.sig
-Patch0:		nss-mysql-build_against_the_shared_mysql_lib.diff
-BuildRequires:	mysql-devel
-BuildRequires:	libtool
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Summary:   NSS library for MySQL
+Name:      nss-mysql
+Version:   1.5
+Release:   1
+Source0:   http://prdownloads.sourceforge.net/libnss-mysql/libnss-mysql-%{version}.tar.gz
+Patch1:    libnss-mysql-multiarch.patch
+URL:       http://libnss-mysql.sourceforge.net
+License:   GPLv2+
+Group:     System/Libraries
+
+BuildRequires: mysql-devel, libtool, autoconf, automake
 
 %description
-NSS-MySQL allows you to authenticate UNIX groups and users using a MySQL
-database. It uses the NSS API which provides an abstraction layer between the
-UNIX authentication API and the related data. NSS-MySQL currently supports the
-passwd, groups and shadow services. NSS-MySQL is highly configurable and
-should work with most reasonable database designs.
+Store your UNIX user accounts in MySQL. "libnss-mysql" enables the following:
+
+* System-wide authentication and name service using a MySQL database.
+  Applications do not need to be MySQL-aware or modified in any way.
+
+* Storing authentication information in a database instead of text files.
+
+* Creation of a single authentication database for multiple servers.
+  This is often referred to as the "Single Sign-on" problem.
+
+* Writing data-modification routines (IE self-management web interface).
+
+libnss-mysql is similar to NIS or LDAP. It provides the same centralized
+authentication service through a database. What does this mean? Username,
+uid, gid, password, etc comes from a MySQL database instead of
+/etc/password, /etc/shadow, and /etc/group. A user configured in MySQL will
+look and behave just like a user configured in /etc/passwd. Your
+applications such as ls, finger, sendmail, qmail, exim, postfix, proftpd,
+X, sshd, etc. will all 'see' these users!
 
 %prep
-
-%setup -q
-%patch0 -p0
-
-# lib64 fix
-perl -pi -e "s|/lib\b|/%{_lib}|g" acinclude.m4
+%setup -q -n lib%{name}-%{version} -a 0
+%patch1 -p1
 
 %build
-rm -f configure
-libtoolize --copy --force; aclocal; autoconf
-
-%configure2_5x \
-    --enable-group \
-    --enable-shadow \
-    --with-mysql=%{_prefix}                                              
-
+libtoolize -f
+autoreconf -f
+%configure2_5x
 %make
+# remove non linux samples
+rm -rf sample/freebsd sample/solaris
 
 %install
-rm -rf %{buildroot}
-
-%makeinstall_std
-
-install -d %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/lib* %{buildroot}/%{_lib}/
-
-# cleanup
-rm -f %{buildroot}/%{_lib}/lib*.so
-rm -f %{buildroot}/%{_lib}/lib*.*a
-
-%if %mdkversion < 200900
-%post -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
+mkdir -p %{buildroot}/{etc,lib}
+make DESTDIR=%{buildroot} install
+rm -f %{buildroot}/%{_libdir}/libnss_mysql.so
 
 %files
-%defattr(-,root,root)
-%doc AUTHORS COPYING NEWS README SHADOW THANKS TODO UPGRADE sample.sql
-%attr(0640,root,root) %config(noreplace) %{_sysconfdir}/nss-mysql.conf
-%attr(0640,root,root) %config(noreplace) %{_sysconfdir}/nss-mysql-root.conf
-%attr(0755,root,root) /%{_lib}/libnss_mysql.so.*
+%{_libdir}/*.so.*
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/libnss-mysql.cfg
+%attr(0600,root,root) %config(noreplace) %{_sysconfdir}/libnss-mysql-root.cfg
+%doc README ChangeLog AUTHORS THANKS NEWS COPYING FAQ DEBUGGING UPGRADING TODO
+%doc sample
