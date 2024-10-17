@@ -4,7 +4,7 @@ Version:   1.5
 Release:   2
 Source0:   http://prdownloads.sourceforge.net/libnss-mysql/libnss-mysql-%{version}.tar.gz
 Patch1:    libnss-mysql-multiarch.patch
-URL:       http://libnss-mysql.sourceforge.net
+URL:       https://libnss-mysql.sourceforge.net
 License:   GPLv2+
 Group:     System/Libraries
 
