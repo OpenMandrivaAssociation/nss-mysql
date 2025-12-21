@@ -8,6 +8,8 @@ URL:       https://libnss-mysql.sourceforge.net
 License:   GPLv2+
 Group:     System/Libraries
 
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires: mysql-devel, libtool, autoconf, automake
 
 %description
